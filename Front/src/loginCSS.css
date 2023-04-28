@@ -1,0 +1,24 @@
+body {
+    width: auto;
+    background-color: #3C671D;
+    font-family: 'Varela Round', sans-serif;
+    font-size: larger;
+    color: white;
+}
+
+#loginBox {
+    margin-inline: 50px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    margin: 10px;
+}
+
+.submitBtn {
+    width: 200px;
+    height: 35px;
+}

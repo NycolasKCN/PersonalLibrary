@@ -17,10 +17,12 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("v1/users")
 public class UserController {
 
     private final UserService userService;
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
 
     public UserController(UserRepository repository) {
         userService = new UserService(repository);
@@ -28,6 +30,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> registerUser(@RequestBody UserForm userForm) {
+        log.info(userForm.toString());
         try {
             return new ResponseEntity<>(userService.registerUser(userForm), HttpStatus.CREATED);
         } catch (UserLoginAlreadyExists e) {
