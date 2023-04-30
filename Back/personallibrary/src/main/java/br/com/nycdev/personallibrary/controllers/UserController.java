@@ -1,7 +1,7 @@
 package br.com.nycdev.personallibrary.controllers;
 
 import br.com.nycdev.personallibrary.dtos.UserDto;
-import br.com.nycdev.personallibrary.exceptions.UserLoginAlreadyExists;
+import br.com.nycdev.personallibrary.exceptions.UserLoginAlreadyExistsException;
 import br.com.nycdev.personallibrary.forms.UserForm;
 
 import br.com.nycdev.personallibrary.repositorys.UserRepository;
@@ -22,7 +22,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final Logger log = LoggerFactory.getLogger(UserController.class);
 
     public UserController(UserRepository repository) {
         userService = new UserService(repository);
@@ -30,10 +29,9 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> registerUser(@RequestBody UserForm userForm) {
-        log.info(userForm.toString());
         try {
             return new ResponseEntity<>(userService.registerUser(userForm), HttpStatus.CREATED);
-        } catch (UserLoginAlreadyExists e) {
+        } catch (UserLoginAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
