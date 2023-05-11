@@ -5,10 +5,9 @@ import br.com.nycdev.personallibrary.services.TokenService;
 import org.springframework.web.bind.annotation.*;
 
 
-// TODO: 29/04/2023 Adicionar a autenticação 
 @RestController
 @CrossOrigin
-@RequestMapping("v1/token")
+@RequestMapping("authenticate")
 public class AuthController {
 
     TokenService tokenService;
@@ -20,5 +19,10 @@ public class AuthController {
     @PostMapping
     public void authenticationUser(@RequestBody LoginForm form) {
 
+    }
+
+    @GetMapping
+    public String hello() {
+        return "hello";
     }
 }

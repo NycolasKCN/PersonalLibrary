@@ -3,12 +3,15 @@ package br.com.nycdev.personallibrary.controllers;
 import br.com.nycdev.personallibrary.dtos.BookDto;
 import br.com.nycdev.personallibrary.exceptions.BookAlreadyExistsException;
 import br.com.nycdev.personallibrary.forms.BookForm;
+import br.com.nycdev.personallibrary.models.Book;
 import br.com.nycdev.personallibrary.repositorys.BookRepository;
 import br.com.nycdev.personallibrary.services.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -21,7 +24,7 @@ public class BookController {
         service = new BookService(repository);
     }
 
-    @GetMapping
+    @PostMapping
     @RequestMapping("/add")
     public ResponseEntity<BookDto> addBook(@RequestBody BookForm bookForm) throws BookAlreadyExistsException {
         try {
@@ -30,5 +33,10 @@ public class BookController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 
         }
+    }
+
+    @GetMapping
+    public List<Book> getAll() {
+        return service.getAll();
     }
 }

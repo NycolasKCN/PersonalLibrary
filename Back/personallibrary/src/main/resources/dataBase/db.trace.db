@@ -1,0 +1,6 @@
+2023-05-11 11:34:28 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SITE_USER" not found (this database is empty); SQL statement:
+select u1_0.id,u1_0.login,u1_0.name,u1_0.password from site_user u1_0 where u1_0.login=? [42104-214]
+2023-05-11 11:52:44 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found (this database is empty); SQL statement:
+select u1_0.id,u1_0.login,u1_0.name,u1_0.password from users u1_0 where u1_0.login=? [42104-214]

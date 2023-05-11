@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
-@Table(name = "SITE_USER")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +14,7 @@ public class User {
     private String login;
     private String password;
 
-    public User(String name,String login, String password){
+    public User(String name, String login, String password){
         this.name = name;
         this.login = login;
         this.password = new BCryptPasswordEncoder().encode(password);

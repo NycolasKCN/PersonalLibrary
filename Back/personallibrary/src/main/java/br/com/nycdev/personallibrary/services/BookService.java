@@ -7,6 +7,7 @@ import br.com.nycdev.personallibrary.forms.BookForm;
 import br.com.nycdev.personallibrary.models.Book;
 import br.com.nycdev.personallibrary.repositorys.BookRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public class BookService {
@@ -26,5 +27,9 @@ public class BookService {
         Book book = new Book(bookForm);
         repository.save(book);
         return new BookDto(book);
+    }
+
+    public List<Book> getAll() {
+        return repository.findAll();
     }
 }
