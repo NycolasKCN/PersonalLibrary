@@ -1,13 +1,11 @@
 package br.com.nycdev.personallibrary.models;
 
 import br.com.nycdev.personallibrary.forms.BookForm;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Value;
 
 @Entity
+@Table(name = "tb_book")
 public class Book {
 
     @Id
