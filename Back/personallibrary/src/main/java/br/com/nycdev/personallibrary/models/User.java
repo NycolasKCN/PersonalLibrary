@@ -4,6 +4,8 @@ import br.com.nycdev.personallibrary.forms.UserForm;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
+
 @Entity
 @Table(name="tb_user")
 public class User {
@@ -14,11 +16,16 @@ public class User {
     @Column(unique = true)
     private String login;
     private String password;
+    private String roles;
 
-    public User(String name, String login, String password){
+    @OneToMany
+    private List<Book> list_books;
+
+    public User(String name, String login, String password, String roles){
         this.name = name;
         this.login = login;
         this.password = new BCryptPasswordEncoder().encode(password);
+        this.roles = roles;
     }
 
     public User(UserForm userForm) {
@@ -59,6 +66,14 @@ public class User {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String role) {
+        this.roles = role;
     }
 
     @Override
