@@ -4,6 +4,9 @@ import br.com.nycdev.personallibrary.forms.BookForm;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "tb_book")
 public class Book {

@@ -4,6 +4,7 @@ import br.com.nycdev.personallibrary.forms.UserForm;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,8 +19,8 @@ public class User {
     private String password;
     private String roles;
 
-    @OneToMany
-    private List<Book> list_books;
+    @ManyToMany
+    private List<Book> books = new ArrayList<>();
 
     public User(String name, String login, String password, String roles){
         this.name = name;

@@ -21,6 +21,7 @@ public class WebSecurityConfig {
         return http.csrf().disable()
                 .authorizeHttpRequests()
                 .anyRequest().permitAll()
+                .and().headers().frameOptions().sameOrigin()
                 .and().build();
     }
 }

@@ -29,7 +29,7 @@ public class BookService {
         return new BookDto(book);
     }
 
-    public List<Book> getAll() {
-        return repository.findAll();
+    public List<BookDto> getAll() {
+        return repository.findAll().stream().map(BookDto::new).toList();
     }
 }
