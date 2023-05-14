@@ -6,16 +6,16 @@ import br.com.nycdev.personallibrary.exceptions.BookAlreadyExistsException;
 import br.com.nycdev.personallibrary.forms.BookForm;
 import br.com.nycdev.personallibrary.models.Book;
 import br.com.nycdev.personallibrary.repositorys.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class BookService {
-    private final BookRepository repository;
-
-    public BookService(BookRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private BookRepository repository;
 
     public BookDto addBook(BookForm bookForm) throws BookAlreadyExistsException {
         Optional<Book> optionalBook = repository.findBookByName(bookForm.name());

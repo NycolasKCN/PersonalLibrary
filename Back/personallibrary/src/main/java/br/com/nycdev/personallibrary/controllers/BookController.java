@@ -6,6 +6,7 @@ import br.com.nycdev.personallibrary.forms.BookForm;
 import br.com.nycdev.personallibrary.models.Book;
 import br.com.nycdev.personallibrary.repositorys.BookRepository;
 import br.com.nycdev.personallibrary.services.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,20 +19,16 @@ import java.util.List;
 @RequestMapping("v1/books")
 public class BookController {
 
-    private final BookService service;
-
-    public BookController(BookRepository repository) {
-        service = new BookService(repository);
-    }
+    @Autowired
+    private BookService service;
 
     @PostMapping
     @RequestMapping("/add")
-    public ResponseEntity<BookDto> addBook(@RequestBody BookForm bookForm) throws BookAlreadyExistsException {
+    public ResponseEntity<BookDto> addBook(@RequestBody BookForm bookForm) {
         try {
             return new ResponseEntity<>(service.addBook(bookForm), HttpStatus.CREATED);
         } catch (BookAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-
         }
     }
 
