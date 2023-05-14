@@ -14,7 +14,7 @@ public class UserDto {
     public UserDto(User user) {
         this.id = user.getId();
         this.name = user.getName();
-        this.login = user.getLogin();
+        this.login = user.getUsername();
     }
 
     public long getId() {

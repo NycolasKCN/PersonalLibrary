@@ -2,14 +2,17 @@ package br.com.nycdev.personallibrary.models;
 
 import br.com.nycdev.personallibrary.forms.UserForm;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name="tb_user")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,6 +56,7 @@ public class User {
         this.name = userName;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -61,11 +65,12 @@ public class User {
         this.password = userPassword;
     }
 
-    public String getLogin() {
+    @Override
+    public String getUsername() {
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setUsername(String login) {
         this.login = login;
     }
 
@@ -75,6 +80,31 @@ public class User {
 
     public void setRoles(String role) {
         this.roles = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override

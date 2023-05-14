@@ -1,28 +1,39 @@
 package br.com.nycdev.personallibrary.controllers;
 
+import br.com.nycdev.personallibrary.dtos.TokenDto;
 import br.com.nycdev.personallibrary.forms.LoginForm;
 import br.com.nycdev.personallibrary.services.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @CrossOrigin
-@RequestMapping("authenticate")
+@RequestMapping("/authenticate")
 public class AuthController {
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    TokenService tokenService;
-
-    public AuthController(){
-        tokenService = new TokenService();
-    }
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping
-    public void authenticationUser(@RequestBody LoginForm form) {
+    public ResponseEntity<TokenDto> authenticationUser(@RequestBody LoginForm form) {
+        UsernamePasswordAuthenticationToken loginData = form.convert();
 
+        try {
+            Authentication authentication = authenticationManager.authenticate(loginData);
+            String token = tokenService.generateToken(authentication);
+            return ResponseEntity.ok(new TokenDto(token));
+        } catch (AuthenticationException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @GetMapping
-    public String hello() {
-        return "hello";
-    }
 }
