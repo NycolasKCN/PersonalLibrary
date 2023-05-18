@@ -2,6 +2,7 @@ package br.com.nycdev.personallibrary.controllers;
 
 import br.com.nycdev.personallibrary.dtos.TokenDto;
 import br.com.nycdev.personallibrary.forms.LoginForm;
+import br.com.nycdev.personallibrary.forms.TokenForm;
 import br.com.nycdev.personallibrary.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,4 +37,16 @@ public class AuthController {
         }
     }
 
+    @RequestMapping("/isValid")
+    @PostMapping
+    public boolean isValid(@RequestBody TokenForm token) {
+        System.out.println(token);
+        return tokenService.isValidToken(token.token());
+    }
+
+    @RequestMapping("/userIdInToken")
+    @PostMapping
+    public Long userIdInToken(@RequestBody TokenForm token) {
+        return tokenService.getUserIdInToken(token.token());
+    }
 }
