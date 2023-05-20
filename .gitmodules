@@ -1,0 +1,3 @@
+[submodule "PersonalLibraryAPI"]
+	path = PersonalLibraryAPI
+	url = https://github.com/NycolasKCN/PersonalLibraryAPI
