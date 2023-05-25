@@ -1,0 +1,11 @@
+GET /v1/books -> GET /v1/book/all | Pega todos os livros cadastrados pelo usuário
+POST /v1/books -> POST /v1/book/user/add | Cadastra um novo livro na biblioteca do usuário
+DELETE /v1/users/books/{id} -> DELETE /v1/book/user/{id}
+POST /v1/users -> POST /v1/user | Cadastra um novo usuario no sistema
+GET /v1/users -> GET /v1/user/all | Todos usuários cadastrados no sistema (acessivel apenas para um ADMIN)
+DELETE /v1/user/{id} | Apaga um usuário do banco de dados (acessivel para o proprio usario e um ADMIM)
+POST /authenticate -> POST /token | Gera um token para o usuario
+
+
+
+/v1/books?user=iduser
