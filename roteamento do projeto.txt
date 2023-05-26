@@ -1,11 +1,12 @@
-GET /v1/books -> GET /v1/book/all | Pega todos os livros cadastrados pelo usuário
-POST /v1/books -> POST /v1/book/user/add | Cadastra um novo livro na biblioteca do usuário
-DELETE /v1/users/books/{id} -> DELETE /v1/book/user/{id}
-POST /v1/users -> POST /v1/user | Cadastra um novo usuario no sistema
-GET /v1/users -> GET /v1/user/all | Todos usuários cadastrados no sistema (acessivel apenas para um ADMIN)
-DELETE /v1/user/{id} | Apaga um usuário do banco de dados (acessivel para o proprio usario e um ADMIM)
-POST /authenticate -> POST /token | Gera um token para o usuario
+Refactoring
 
-
-
-/v1/books?user=iduser
+/v1/book/all  GET      | Acessa todos os livros de algum usuário
+/v1/book      POST     | Cadastra um livro para o usuário
+/V1/book/id   GET      | Acessa o livro de id tal
+/v1/book/id   DELETE   | Deleta o livro de id tal
+------------------------
+/v1/user/all  GET      | Acessa todos os usuários cadastrados      | OK
+/v1/user      POST     | Cadastra um novo usuário no sistema       | OK
+/v1/user/id   DELETE   | Deleta o usuário de id tal                | OK
+------------------------
+/token        GET      | Gera um token de acesso para o usuário    | OK
