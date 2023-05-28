@@ -1,3 +1,6 @@
 [submodule "PersonalLibraryAPI"]
 	path = PersonalLibraryAPI
 	url = https://github.com/NycolasKCN/PersonalLibraryAPI
+[submodule "PersonalLibraryJava"]
+	path = PersonalLibraryJava
+	url = https://github.com/NycolasKCN/PersonalLibraryJava.git

@@ -64,7 +64,7 @@
 						}
 					}
 				},
-				"url": "http://localhost:8080/v1/users"
+				"url": "http://localhost:8080/v1/user"
 			},
 			"response": []
 		},
@@ -87,8 +87,11 @@
 					}
 				}
 			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -99,12 +102,12 @@
 						}
 					}
 				},
-				"url": "http://localhost:8080/authenticate"
+				"url": "http://localhost:8080/token"
 			},
 			"response": []
 		},
 		{
-			"name": "add book to User",
+			"name": "Add book to User",
 			"event": [
 				{
 					"listen": "test",
@@ -126,24 +129,24 @@
 				}
 			],
 			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "accessToken",
-						"value": "{{token}}",
-						"type": "text"
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
 					}
-				],
+				},
+				"method": "POST",
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"name\": \"Book test\",\r\n\t\"author\": \"Author Test\"\r\n}",
+					"raw": "{\r\n\t\"userId\" : {{userId}},\r\n\t\"name\": \"Book test\",\r\n\t\"author\": \"Author Test\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "http://localhost:8080/v1/books/add"
+				"url": "http://localhost:8080/v1/book"
 			},
 			"response": []
 		},
@@ -165,7 +168,7 @@
 						"exec": [
 							"const jsonData = pm.response.json();\r",
 							"pm.test('Verify book of user', () => {\r",
-							"\tpm.response.to.have.status(302);\r",
+							"\tpm.response.to.have.status(200);\r",
 							"\tpm.expect(jsonData).to.be.an(\"array\");\r",
 							"});"
 						],
@@ -173,16 +176,28 @@
 					}
 				}
 			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "accessToken",
-						"value": "{{token}}",
-						"type": "text"
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
 					}
-				],
-				"url": "http://localhost:8080/v1/users/books"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"userId\" : {{userId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/v1/book/all"
 			},
 			"response": []
 		},
@@ -195,8 +210,8 @@
 						"exec": [
 							"pm.test('Deleting book and verify response body', () => {\r",
 							"\tlet response = pm.response.json();\r",
-							"\tpm.response.to.have.status(202);\r",
-							"    pm.response.to.be.accepted;\r",
+							"\tpm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
 							"    pm.response.to.be.json;\r",
 							"\tpm.expect(response.name).to.eql(\"Book test\");\r",
 							"\tpm.expect(response.author).to.eql(\"Author Test\")\r",
@@ -208,15 +223,15 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "accessToken",
-						"value": "{{token}}",
-						"type": "text"
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
 					}
-				],
-				"url": "http://localhost:8080/v1/users/books/{{bookId}}"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8080/v1/book/delete/{{bookId}}"
 			},
 			"response": []
 		},
@@ -229,7 +244,7 @@
 						"exec": [
 							"pm.test(\"Deleting user and verify response body\", () =>{\r",
 							"\tlet response = pm.response.json();\r",
-							"\tpm.response.to.have.status(202);\r",
+							"\tpm.response.to.have.status(200);\r",
 							"\tpm.response.to.be.json;\r",
 							"\tlet userid = parseInt(pm.collectionVariables.get(\"userId\"));\r",
 							"\tpm.expect(response.id).to.eql(userid);\r",
@@ -242,9 +257,15 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
 				"method": "DELETE",
 				"header": [],
-				"url": "http://localhost:8080/v1/users/delete/{{userId}}"
+				"url": "http://localhost:8080/v1/user/{{userId}}"
 			},
 			"response": []
 		}
