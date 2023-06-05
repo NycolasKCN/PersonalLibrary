@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "917307d6-d6f7-4b7e-ab03-d102fcf214b4",
+		"_postman_id": "19413808-2b07-428b-aa01-95c4fb6b8d5d",
 		"name": "PersonalLibraryTests",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "23992993"
 	},
 	"item": [
@@ -64,7 +64,18 @@
 						}
 					}
 				},
-				"url": "http://localhost:8080/v1/user"
+				"url": {
+					"raw": "http://localhost:8080/v1/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"user"
+					]
+				}
 			},
 			"response": []
 		},
@@ -141,6 +152,8 @@
 							"\tlet responseBody = pm.response.json();\r",
 							"\tpm.collectionVariables.set(\"token\", responseBody.token)\r",
 							"\tpm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(responseBody.id).to.eql(parseInt(pm.collectionVariables.get(\"userId\")));\r",
+							"    pm.expect(responseBody.name).to.eql(\"Name Test\");\r",
 							"\tpm.response.to.be.json;\r",
 							"});\r",
 							""
@@ -161,7 +174,17 @@
 						}
 					}
 				},
-				"url": "http://localhost:8080/token"
+				"url": {
+					"raw": "http://localhost:8080/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"token"
+					]
+				}
 			},
 			"response": []
 		},
@@ -226,9 +249,13 @@
 			"request": {
 				"auth": {
 					"type": "bearer",
-					"bearer": {
-						"token": "{{token}}"
-					}
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "POST",
 				"header": [],
@@ -241,7 +268,18 @@
 						}
 					}
 				},
-				"url": "http://localhost:8080/v1/book"
+				"url": {
+					"raw": "http://localhost:8080/v1/book",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"book"
+					]
+				}
 			},
 			"response": []
 		},
@@ -545,9 +583,13 @@
 			"request": {
 				"auth": {
 					"type": "bearer",
-					"bearer": {
-						"token": "{{token}}"
-					}
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "GET",
 				"header": [],
@@ -560,7 +602,19 @@
 						}
 					}
 				},
-				"url": "http://localhost:8080/v1/book/all"
+				"url": {
+					"raw": "http://localhost:8080/v1/book/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"book",
+						"all"
+					]
+				}
 			},
 			"response": []
 		},
@@ -647,13 +701,30 @@
 			"request": {
 				"auth": {
 					"type": "bearer",
-					"bearer": {
-						"token": "{{token}}"
-					}
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "DELETE",
 				"header": [],
-				"url": "http://localhost:8080/v1/book/delete/{{bookId}}"
+				"url": {
+					"raw": "http://localhost:8080/v1/book/delete/{{bookId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"book",
+						"delete",
+						"{{bookId}}"
+					]
+				}
 			},
 			"response": []
 		},
@@ -751,13 +822,29 @@
 			"request": {
 				"auth": {
 					"type": "bearer",
-					"bearer": {
-						"token": "{{token}}"
-					}
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "DELETE",
 				"header": [],
-				"url": "http://localhost:8080/v1/user/{{userId}}"
+				"url": {
+					"raw": "http://localhost:8080/v1/user/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"user",
+						"{{userId}}"
+					]
+				}
 			},
 			"response": []
 		},
