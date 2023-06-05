@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Register User",
+			"name": "Register User 1",
 			"event": [
 				{
 					"listen": "test",
@@ -69,7 +69,69 @@
 			"response": []
 		},
 		{
-			"name": "Authenticate User",
+			"name": "Register User 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test('registering user and check the response', () => {\r",
+							"\tlet responseBody = pm.response.json();\r",
+							"\tpm.collectionVariables.set(\"userId2\", responseBody.id)\r",
+							"\t\r",
+							"\tpm.response.to.have.status(201);\r",
+							"    pm.response.to.be.json;\r",
+							"\tpm.expect(responseBody.name).to.eql(pm.collectionVariables.get(\"userName2\"))\r",
+							"\tpm.expect(responseBody.login).to.eql(pm.collectionVariables.get(\"userLogin2\"))\r",
+							"\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							" function genLogin() {\r",
+							"    var chars = \"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\";\r",
+							"    var loginLength = 10;\r",
+							"    var login = \"\";\r",
+							"\tfor (var i = 0; i <= loginLength; i++) {\r",
+							"\t\tvar randomNumber = Math.floor(Math.random() * chars.length);\r",
+							"\t\tlogin += chars.substring(randomNumber, randomNumber +1);\r",
+							"\t}\r",
+							"\t\r",
+							"\tpm.collectionVariables.set(\"userLogin2\", login);\r",
+							"}\r",
+							"\r",
+							"genLogin();"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"name\": \"{{userName2}}\",\r\n\t\"login\": \"{{userLogin2}}\",\r\n\t\"password\": \"{{userPassword2}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/v1/user"
+			},
+			"response": []
+		},
+		{
+			"name": "Authenticate User 1",
 			"event": [
 				{
 					"listen": "test",
@@ -77,7 +139,7 @@
 						"exec": [
 							"pm.test(\"generate token and verify status code\", () => {\r",
 							"\tlet responseBody = pm.response.json();\r",
-							"\tpm.collectionVariables.set(\"token\", responseBody.accessToken)\r",
+							"\tpm.collectionVariables.set(\"token\", responseBody.token)\r",
 							"\tpm.expect(pm.response.code).to.eql(200);\r",
 							"\tpm.response.to.be.json;\r",
 							"});\r",
@@ -87,11 +149,8 @@
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -107,7 +166,42 @@
 			"response": []
 		},
 		{
-			"name": "Add book to User",
+			"name": "Authenticate User 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"generate token and verify status code\", () => {\r",
+							"\tlet responseBody = pm.response.json();\r",
+							"\tpm.collectionVariables.set(\"token2\", responseBody.token)\r",
+							"\tpm.expect(pm.response.code).to.eql(200);\r",
+							"\tpm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"login\": \"{{userLogin2}}\",\r\n\t\"password\": \"{{userPassword2}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/token"
+			},
+			"response": []
+		},
+		{
+			"name": "Add book to User 1",
 			"event": [
 				{
 					"listen": "test",
@@ -119,7 +213,8 @@
 							"\tpm.response.to.have.status(201);\r",
 							"    pm.response.to.be.json;\r",
 							"\tpm.expect(response.name).to.eql(\"Book test\");\r",
-							"\tpm.expect(response.author).to.eql(\"Author Test\")\r",
+							"\tpm.expect(response.author).to.eql(\"Author Test\");\r",
+							"\tpm.expect(response.pages).to.eql(\"461\");\r",
 							"\tpm.expect(response.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
 							"})\r",
 							""
@@ -139,7 +234,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"userId\" : {{userId}},\r\n\t\"name\": \"Book test\",\r\n\t\"author\": \"Author Test\"\r\n}",
+					"raw": "{\r\n\t\"userId\" : {{userId}},\r\n\t\"name\": \"Book test\",\r\n\t\"author\": \"Author Test\",\r\n\t\"pages\" : \"461\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -151,7 +246,261 @@
 			"response": []
 		},
 		{
-			"name": "Books of user",
+			"name": "Add another book to User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Creating book and verify responde body', () => {\r",
+							"\tvar response = pm.response.json();\r",
+							"\tpm.collectionVariables.set(\"bookId2\", response.id)\r",
+							"\tpm.response.to.have.status(201);\r",
+							"    pm.response.to.be.json;\r",
+							"\tpm.expect(response.name).to.eql(\"Book test 2\");\r",
+							"\tpm.expect(response.author).to.eql(\"Author Test 2\");\r",
+							"\tpm.expect(response.pages).to.eql(\"123\");\r",
+							"\tpm.expect(response.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"userId\" : {{userId}},\r\n\t\"name\": \"Book test 2\",\r\n\t\"author\": \"Author Test 2\",\r\n\t\"pages\" : \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/v1/book"
+			},
+			"response": []
+		},
+		{
+			"name": "Add book to User 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Creating book and verify responde body', () => {\r",
+							"\tvar response = pm.response.json();\r",
+							"\tpm.collectionVariables.set(\"bookId3\", response.id)\r",
+							"\tpm.response.to.have.status(201);\r",
+							"    pm.response.to.be.json;\r",
+							"\tpm.expect(response.name).to.eql(\"Book test 3\");\r",
+							"\tpm.expect(response.author).to.eql(\"Author Test 3\");\r",
+							"\tpm.expect(response.pages).to.eql(\"832\");\r",
+							"\tpm.expect(response.owner).to.eql(pm.collectionVariables.get(\"userName2\"));\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token2}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"userId\" : {{userId2}},\r\n\t\"name\": \"Book test 3\",\r\n\t\"author\": \"Author Test 3\",\r\n\t\"pages\" : \"832\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/v1/book"
+			},
+			"response": []
+		},
+		{
+			"name": "Find books by name user 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Find books by name.\", () => {\r",
+							"\tlet jsonData = pm.response.json();\r",
+							"\tpm.response.to.have.status(200);\r",
+							"\tpm.expect(jsonData).to.be.an(\"array\");\r",
+							"\tlet lentgh = Object.keys(jsonData).length;\r",
+							"\tpm.expect(lentgh).to.eql(2);\r",
+							"\tlet book1 = jsonData[0];\r",
+							"\tlet book2 = jsonData[1];\r",
+							"\tpm.expect(book1.id).to.eql(pm.collectionVariables.get(\"bookId\"));\r",
+							"\tpm.expect(book1.name).to.eql(\"Book test\");\r",
+							"\tpm.expect(book1.author).to.eql(\"Author Test\");\r",
+							"\tpm.expect(book1.pages).to.eql(\"461\");\r",
+							"\tpm.expect(book1.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
+							"\r",
+							"\tpm.expect(book2.name).to.eql(\"Book test 2\");\r",
+							"\tpm.expect(book2.author).to.eql(\"Author Test 2\");\r",
+							"\tpm.expect(book2.pages).to.eql(\"123\");\r",
+							"\tpm.expect(book2.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/v1/book/findByName/Book"
+			},
+			"response": []
+		},
+		{
+			"name": "Find books by author user 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Find books by Author user 1.\", () => {\r",
+							"\tlet jsonData = pm.response.json();\r",
+							"\tpm.response.to.have.status(200);\r",
+							"\tpm.expect(jsonData).to.be.an(\"array\");\r",
+							"\tlet lentgh = Object.keys(jsonData).length;\r",
+							"\tpm.expect(lentgh).to.eql(2);\r",
+							"\tlet book1 = jsonData[0];\r",
+							"\tlet book2 = jsonData[1];\r",
+							"\tpm.expect(book1.id).to.eql(pm.collectionVariables.get(\"bookId\"));\r",
+							"\tpm.expect(book1.name).to.eql(\"Book test\");\r",
+							"\tpm.expect(book1.author).to.eql(\"Author Test\");\r",
+							"\tpm.expect(book1.pages).to.eql(\"461\");\r",
+							"\tpm.expect(book1.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
+							"\r",
+							"\tpm.expect(book2.name).to.eql(\"Book test 2\");\r",
+							"\tpm.expect(book2.author).to.eql(\"Author Test 2\");\r",
+							"\tpm.expect(book2.pages).to.eql(\"123\");\r",
+							"\tpm.expect(book2.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/v1/book/findByAuthor/Author"
+			},
+			"response": []
+		},
+		{
+			"name": "Find books by name user 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Find book by name user 2\", () => {\r",
+							"\tlet jsonData = pm.response.json();\r",
+							"\tpm.response.to.have.status(200);\r",
+							"\tpm.expect(jsonData).to.be.an(\"array\");\r",
+							"\tlet lentgh = Object.keys(jsonData).length;\r",
+							"\tpm.expect(lentgh).to.eql(1);\r",
+							"\tlet book1 = jsonData[0];\r",
+							"\tpm.expect(book1.id.toString()).to.eql(pm.collectionVariables.get(\"bookId3\"));\r",
+							"\tpm.expect(book1.name).to.eql(\"Book test 3\");\r",
+							"\tpm.expect(book1.author).to.eql(\"Author Test 3\");\r",
+							"\tpm.expect(book1.pages).to.eql(\"832\");\r",
+							"\tpm.expect(book1.owner).to.eql(pm.collectionVariables.get(\"userName2\"));\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token2}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/v1/book/findByName/Book"
+			},
+			"response": []
+		},
+		{
+			"name": "Find books by author user 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Find books by Author user 2.\", () => {\r",
+							"\tlet jsonData = pm.response.json();\r",
+							"\tpm.response.to.have.status(200);\r",
+							"\tpm.expect(jsonData).to.be.an(\"array\");\r",
+							"\tlet lentgh = Object.keys(jsonData).length;\r",
+							"\tpm.expect(lentgh).to.eql(1);\r",
+							"\tlet book1 = jsonData[0];\r",
+							"\tpm.expect(book1.id.toString()).to.eql(pm.collectionVariables.get(\"bookId3\"));\r",
+							"\tpm.expect(book1.name).to.eql(\"Book test 3\");\r",
+							"\tpm.expect(book1.author).to.eql(\"Author Test 3\");\r",
+							"\tpm.expect(book1.pages).to.eql(\"832\");\r",
+							"\tpm.expect(book1.owner).to.eql(pm.collectionVariables.get(\"userName2\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token2}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/v1/book/findByAuthor/Author"
+			},
+			"response": []
+		},
+		{
+			"name": "Books of user 1",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -166,10 +515,24 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const jsonData = pm.response.json();\r",
 							"pm.test('Verify book of user', () => {\r",
+							"\tlet jsonData = pm.response.json();\r",
 							"\tpm.response.to.have.status(200);\r",
 							"\tpm.expect(jsonData).to.be.an(\"array\");\r",
+							"\tlet lentgh = Object.keys(jsonData).length;\r",
+							"\tpm.expect(lentgh).to.eql(2);\r",
+							"\tlet book1 = jsonData[0];\r",
+							"\tlet book2 = jsonData[1];\r",
+							"\tpm.expect(book1.id).to.eql(pm.collectionVariables.get(\"bookId\"));\r",
+							"\tpm.expect(book1.name).to.eql(\"Book test\");\r",
+							"\tpm.expect(book1.author).to.eql(\"Author Test\");\r",
+							"\tpm.expect(book1.pages).to.eql(\"461\");\r",
+							"\tpm.expect(book1.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
+							"\r",
+							"\tpm.expect(book2.name).to.eql(\"Book test 2\");\r",
+							"\tpm.expect(book2.author).to.eql(\"Author Test 2\");\r",
+							"\tpm.expect(book2.pages).to.eql(\"123\");\r",
+							"\tpm.expect(book2.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -202,7 +565,66 @@
 			"response": []
 		},
 		{
-			"name": "Delete book",
+			"name": "Books of user 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Verify book of user', () => {\r",
+							"\tlet jsonData = pm.response.json();\r",
+							"\tpm.response.to.have.status(200);\r",
+							"\tpm.expect(jsonData).to.be.an(\"array\");\r",
+							"\tlet lentgh = Object.keys(jsonData).length;\r",
+							"\tpm.expect(lentgh).to.eql(1);\r",
+							"\tlet book1 = jsonData[0];\r",
+							"\tpm.expect(book1.id.toString()).to.eql(pm.collectionVariables.get(\"bookId3\"));\r",
+							"\tpm.expect(book1.name).to.eql(\"Book test 3\");\r",
+							"\tpm.expect(book1.author).to.eql(\"Author Test 3\");\r",
+							"\tpm.expect(book1.pages).to.eql(\"832\");\r",
+							"\tpm.expect(book1.owner).to.eql(pm.collectionVariables.get(\"userName2\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token2}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"userId\" : {{userId2}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/v1/book/all"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete book 1",
 			"event": [
 				{
 					"listen": "test",
@@ -236,7 +658,77 @@
 			"response": []
 		},
 		{
-			"name": "Delete user",
+			"name": "Delete book 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Deleting book and verify response body', () => {\r",
+							"\tlet response = pm.response.json();\r",
+							"\tpm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"\tpm.expect(response.name).to.eql(\"Book test 2\");\r",
+							"\tpm.expect(response.author).to.eql(\"Author Test 2\")\r",
+							"\tpm.expect(response.owner).to.eql(pm.collectionVariables.get(\"userName\"));\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8080/v1/book/delete/{{bookId2}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete book 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Deleting book and verify response body', () => {\r",
+							"\tlet response = pm.response.json();\r",
+							"\tpm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"\tpm.expect(response.id.toString()).to.eql(pm.collectionVariables.get(\"bookId3\"));\r",
+							"\tpm.expect(response.name).to.eql(\"Book test 3\");\r",
+							"\tpm.expect(response.author).to.eql(\"Author Test 3\");\r",
+							"\tpm.expect(response.pages).to.eql(\"832\")\r",
+							"\tpm.expect(response.owner).to.eql(pm.collectionVariables.get(\"userName2\"));\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token2}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8080/v1/book/delete/{{bookId3}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user 1",
 			"event": [
 				{
 					"listen": "test",
@@ -268,6 +760,40 @@
 				"url": "http://localhost:8080/v1/user/{{userId}}"
 			},
 			"response": []
+		},
+		{
+			"name": "Delete user 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Deleting user and verify response body\", () =>{\r",
+							"\tlet response = pm.response.json();\r",
+							"\tpm.response.to.have.status(200);\r",
+							"\tpm.response.to.be.json;\r",
+							"\tlet userid = parseInt(pm.collectionVariables.get(\"userId2\"));\r",
+							"\tpm.expect(response.id).to.eql(userid);\r",
+							"\tpm.expect(response.name).to.eql(pm.collectionVariables.get(\"userName2\"));\r",
+							"\tpm.expect(response.login).to.eql(pm.collectionVariables.get(\"userLogin2\").toString());\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token2}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8080/v1/user/{{userId2}}"
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -297,9 +823,24 @@
 			"type": "string"
 		},
 		{
+			"key": "token2",
+			"value": "",
+			"type": "string"
+		},
+		{
 			"key": "bookId",
 			"value": "1",
 			"type": "default"
+		},
+		{
+			"key": "bookId2",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "bookId3",
+			"value": "",
+			"type": "string"
 		},
 		{
 			"key": "userId",
@@ -320,6 +861,26 @@
 			"key": "userPassword",
 			"value": "passwordTest1234",
 			"type": "default"
+		},
+		{
+			"key": "userId2",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userName2",
+			"value": "Name Test 2",
+			"type": "string"
+		},
+		{
+			"key": "userLogin2",
+			"value": "user.test2",
+			"type": "string"
+		},
+		{
+			"key": "userPassword2",
+			"value": "passwordTest1234",
+			"type": "string"
 		}
 	]
 }
