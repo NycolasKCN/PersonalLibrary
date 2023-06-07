@@ -11,7 +11,7 @@ Projeto para fazer o gerenciamento da sua biblioteca pessoal.
 - Sistemas de úsuarios
 - Cadastramento dos usuários
 
-### Todo'S
+### Todo's
 - Adicionar status de leitura para os livros
 - Adicionar modo escuro na aplição desktop
 
