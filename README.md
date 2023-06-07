@@ -8,7 +8,7 @@ Projeto para fazer o gerenciamento da sua biblioteca pessoal.
 - Pesquisa de livros
 - Exclusão de livros
 - Exportação dos livros para csv
-- Sistemas de úsuarios
+- Sistemas de usuários
 - Cadastramento dos usuários
 
 ### Todo's
